@@ -44,7 +44,7 @@ public:
         int i = 0;
         int j = -1;
         while (i < p.size() - 1) {
-            if (j == -1 || p[i] == p[j]) {
+            if (j == -1 || p[i] ==  needle[j]) {
                 ++i;
                 ++j;
                 next[i] = j;
@@ -55,19 +55,44 @@ public:
     }
 };*/
 
-// BM算法
+// SUNDAY算法
 class Solution {
 public:
+    map<char, int> Map;
+
     int strStr(string haystack, string needle) {
         if (needle.empty()) {
             return 0;
         }
 
-        int i = 0;
-        int j = 0;
         int pLen = needle.size();
         int sLen = haystack.size();
 
-        while ()
+        for (int i = 0; i < sLen; ++i) {
+            Map[haystack[i]] = pLen + 1;
+        }
+
+        for (int i = 0; i < pLen; ++i) {
+            Map[needle[i]] = pLen - i;
+        }
+
+        int i = 0;
+        int j = 0;
+
+        while (i <= sLen - pLen) {
+            j = 0;
+            while (haystack[i + j] == needle[j]) {
+                ++j;
+                if (j >= pLen) {
+                    return i;
+                }
+            }
+            if (i + pLen == sLen) {
+                return -1;
+            }
+            i += Map[haystack[i + pLen]];
+        }
+
+        return -1;
     }
 };
