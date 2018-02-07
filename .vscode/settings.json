@@ -4,6 +4,10 @@
         "ostream": "cpp",
         "array": "cpp",
         "initializer_list": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "string": "cpp",
+        "chrono": "cpp",
+        "limits": "cpp",
+        "*.tcc": "cpp"
     }
 }
