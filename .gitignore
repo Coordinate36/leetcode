@@ -1,9 +1,7 @@
-0_1pack
-completePack
+0_1pack*
+completePack*
 test
-test1
-test1.cc
-BM.cc
-BM
+test*
+BM*
 exam/*
 target/*
