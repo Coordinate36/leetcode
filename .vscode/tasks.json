@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "g++ -g 62.cc -o test"
+            "command": "g++ -g 1003.cc -o test"
         }
     ]
 }
