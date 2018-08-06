@@ -11,6 +11,15 @@
         "*.tcc": "cpp",
         "iosfwd": "cpp",
         "iterator": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "__bit_reference": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp",
+        "deque": "cpp",
+        "ios": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "string_view": "cpp",
+        "algorithm": "cpp"
     }
 }
