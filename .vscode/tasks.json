@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "g++ -g 1003.cc -o test"
+            "command": "g++ -g -std=c++11 100003.cc -o test"
         }
     ]
 }
