@@ -1,19 +1,19 @@
 //package leetcode
 
-type pair struct {
-	word   string
-	length int
-}
-
 func findLadders(beginWord string, endWord string, wordList []string) [][]string {
 	wordSet := make(map[string]int)
+	wordLength := make(map[string]int)
 
 	for _, word := range wordList {
 		wordSet[word] = 1
 	}
 	delete(wordSet, beginWord)
 
-	minLength := ladderLength(beginWord, endWord, wordSet)
+	ladderLength(beginWord, endWord, wordSet, wordLength)
+	_, ok := wordLength[endWord]
+	if !ok {
+		return [][]string{}
+	}
 
 	for _, word := range wordList {
 		wordSet[word] = 1
@@ -22,44 +22,45 @@ func findLadders(beginWord string, endWord string, wordList []string) [][]string
 
 	var ladder []string
 	var ladders [][]string
-	dfs(ladder, &ladders, endWord, wordSet, minLength, beginWord)
+	dfs(ladder, &ladders, endWord, wordSet, wordLength, beginWord)
 
 	return ladders
 }
 
-func ladderLength(beginWord string, endWord string, wordSet map[string]int) int {
-	queue := []pair{pair{beginWord, 1}}
+func ladderLength(beginWord string, endWord string, wordSet map[string]int, wordLength map[string]int) {
+	queue := []string{beginWord}
+	wordLength[beginWord] = 1
 
 	for len(queue) > 0 {
-		elem := queue[0]
+		word := queue[0]
 		queue = queue[1:]
 
-		for i := 0; i < len(elem.word); i++ {
-			word := []byte(elem.word)
-			for j := 'a'; j < 'z'; j++ {
-				word[i] = byte(j)
-				str := string(word)
+		for i := 0; i < len(word); i++ {
+			bytes := []byte(word)
+			for j := byte('a'); j < 'z'; j++ {
+				bytes[i] = j
+				str := string(bytes)
 
 				_, ok := wordSet[str]
 				if ok {
+					wordLength[str] = wordLength[word] + 1
 					if str == endWord {
-						return elem.length + 1
+						return
 					}
-					queue = append(queue, pair{str, elem.length + 1})
+					queue = append(queue, str)
 					delete(wordSet, str)
 				}
 			}
 		}
 	}
-	return 0
 }
 
-func dfs(ladder []string, ladders *[][]string, endWord string, wordSet map[string]int, minLength int, word string) {
+func dfs(ladder []string, ladders *[][]string, endWord string, wordSet map[string]int, wordLength map[string]int, word string) {
 	ladder = append(ladder, word)
 
-	if len(ladder) == minLength {
+	if len(ladder) == wordLength[endWord] {
 		if word == endWord {
-			ladderCopy := make([]string, minLength)
+			ladderCopy := make([]string, wordLength[endWord])
 			copy(ladderCopy, ladder)
 			*ladders = append(*ladders, ladderCopy)
 		}
@@ -68,17 +69,13 @@ func dfs(ladder []string, ladders *[][]string, endWord string, wordSet map[strin
 
 	delete(wordSet, word)
 	for i := 0; i < len(word); i++ {
-		for j := 'a'; j <= 'z'; j++ {
-			if byte(j) == word[i] {
-				continue
-			}
-
+		for j := byte('a'); j <= 'z'; j++ {
 			bytes := []byte(word)
-			bytes[i] = byte(j)
+			bytes[i] = j
 			str := string(bytes)
 			_, ok := wordSet[str]
-			if ok {
-				dfs(ladder, ladders, endWord, wordSet, minLength, str)
+			if ok && wordLength[word]+1 == wordLength[str] {
+				dfs(ladder, ladders, endWord, wordSet, wordLength, str)
 			}
 		}
 	}
