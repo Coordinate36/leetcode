@@ -6,7 +6,7 @@
 // 	Right *TreeNode
 // }
 
-func levelOrderBottom(root *TreeNode) [][]int {
+func levelOrder(root *TreeNode) [][]int {
 	var ans [][]int
 	levelRecursion(root, &ans, 0)
 	return ans
