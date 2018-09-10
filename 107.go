@@ -9,6 +9,10 @@
 func levelOrderBottom(root *TreeNode) [][]int {
 	var ans [][]int
 	levelRecursion(root, &ans, 0)
+	mid := len(ans) >> 1
+	for i := 0; i < mid; i++ {
+		ans[i], ans[len(ans)-i-1] = ans[len(ans)-i-1], ans[i]
+	}
 	return ans
 }
 
