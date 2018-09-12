@@ -30,9 +30,9 @@ func calculate(s string) int {
 func walk(str []rune, step int) (int, int) {
 	var ans int
 
-	if str[step] >= '0' && str[step] <= '9' {
+	if isDigit(str[step]) {
 		ans = int(str[step] - '0')
-		for step++; step < len(str) && str[step] >= '0' && str[step] <= '9'; step++ {
+		for step++; step < len(str) && isDigit(str[step]); step++ {
 			ans = ans*10 + int(str[step]-'0')
 		}
 	} else {
@@ -53,6 +53,10 @@ func walk(str []rune, step int) (int, int) {
 	}
 
 	return ans, step
+}
+
+func isDigit(c rune) bool {
+	return c >= '0' && c <= '9'
 }
 
 func main() {
