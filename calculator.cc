@@ -15,6 +15,17 @@ enum {
   NUMBER, TK_HEX, TK_REG, TK_NEQ, TK_AND, TK_DEFER
 };
 
+enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
+enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
+enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
+
+const char* reg_ls[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
+const char* reg_ws[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
+const char* reg_bs[] = {"al", "cl", "dl", "bl", "ah", "ch", "dh", "bh"};
+int grp_w[] = {0, 1, 2, 3, 4, 5, 6, 7};
+int grp_l[] = {8, 9, 10, 11, 12, 13, 14, 15};
+int grp_b[] = {20, 21, 22, 23, 24, 25, 26, 27};
+
 Token tokens[32];
 Token poland_stack[32];
 Token poland_output[32];
@@ -64,11 +75,30 @@ void make_token(char *input) {
             i++;
             tokens[nr_token++].type = TK_NEQ;
         } else if (input[i] == '$') {
+            int j;
+            for (j = 0; input[i+j] == '$' || (input[i+j] >= 'a' && input[i+j] <= 'z'); j++) {
+                tokens[nr_token].str[j] = input[i+j];
+            }
+            i += j - 1;
             tokens[nr_token++].type = TK_REG;
         } else if (input[i] != ' ') {
             tokens[nr_token++].type = input[i];
         }
     }
+}
+
+int reg_value(char* reg) {
+    int i;
+    for (i = 0; i < 8; i++) {
+        if (strcmp(reg, reg_ls[i]) == 0) {
+            return grp_l[i];
+        } else if (strcmp(reg, reg_ws[i]) == 0) {
+            return grp_w[i];
+        } else if (strcmp(reg, reg_bs[i]) == 0) {
+            return grp_b[i];
+        }
+    }
+    return -1;
 }
 
 int make_poland() {
@@ -124,12 +154,12 @@ int cal_poland(int poland_len) {
         } else if (poland_output[i].type == TK_HEX) {
             sscanf(poland_output[i].str, "%x", &val);
             num_stack[top++] = val;
+        } else if (poland_output[i].type == TK_REG) {
+            num_stack[top++] = reg_value(poland_output[i].str + 1);
         } else {
             top1 = num_stack[--top];
             if (poland_output[i].type == TK_DEFER) {
                 ans = top1 * 2;
-            } else if (poland_output[i].type == TK_REG) {
-                ans = top1 * 3;
             } else {
                 // binary op
                 top2 = num_stack[--top];
@@ -192,8 +222,8 @@ unsigned calculate(char* input) {
 
 int main() {
     // char input[] = "( 723014127+ 585011881*2016025616/ 509096286)";
-    char input[] = "4 +3*(2+ 1) == 0xd && *1 == 2";
-    // char input[] = "0xd";
+    char input[] = "4 +3*(2+ 1) == 0xd && $ax == 0";
+    // char input[] = "$ax";
     cout << calculate(input);
     return 0;
 }
