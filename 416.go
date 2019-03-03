@@ -71,9 +71,6 @@ func canSumTo(nums []int, target int, end int) bool {
 	if target == 0 {
 		return true
 	}
-	if end < 0 {
-		return false
-	}
 
 	for i := end; i >= 0; i-- {
 		if target < nums[i] {
