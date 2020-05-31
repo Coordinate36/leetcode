@@ -63,6 +63,7 @@
         "set": "cpp",
         "string_view": "cpp",
         "algorithm": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "cstdio": "cpp"
     }
 }
