@@ -1,29 +1,17 @@
-int max(int a, int b) {
-	if(a > b) {
-		return a;
-	}
-	else {
-		return b;
-	}
-}
-
-int candy(int* ratings, int ratingsSize) {
-    int num[ratingsSize];
-    memset(num, 1, sizeof(num));
-    int i;
-    int sum = 0;
-    for(i = 0; i < ratingsSize; i++) {
-    	if(ratings[i + 1] > ratings[i]) {
-    		num[i + 1] = num[i] + 1;
-    	}
+class Solution {
+public:
+    int candy(vector<int>& ratings) {
+        vector<int> candies(ratings.size(), 1);
+        for (int i = 1; i < candies.size(); ++i) {
+            if (ratings[i] > ratings[i-1]) {
+                candies[i] = candies[i-1] + 1;
+            }
+        }
+        for (int i = candies.size() - 1; i > 0; --i) {
+            if (ratings[i-1] > ratings[i]) {
+                candies[i-1] = max(candies[i-1], candies[i] + 1);
+            }
+        }
+        return accumulate(candies.cbegin(), candies.cend(), 0);
     }
-    for(i = ratingsSize - 1; i; i--) {
-    	if(ratings[i - 1] > ratings[i]) {
-    		num[i - 1] = max(num[i] + 1, num[i - 1]);
-    	}
-    }
-    for(i = 0; i < ratingsSize; i++) {
-    	sum += num[i];
-    }
-    return sum;
-}
+};
