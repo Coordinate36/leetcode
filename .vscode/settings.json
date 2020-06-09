@@ -65,6 +65,8 @@
         "algorithm": "cpp",
         "memory": "cpp",
         "cstdio": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "sstream": "cpp",
+        "cmath": "cpp"
     }
 }
