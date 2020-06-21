@@ -24,10 +24,10 @@ public:
         if (ans && left) {
             lca = root;
         }
-        if (lca) {
-            return root;
-        }
         ans |= left;
+        if (lca) {
+            return ans;
+        }
         bool right = dfs(root->right, p, q);
         if (ans && right) {
             lca = root;
